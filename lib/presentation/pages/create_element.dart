@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:ai_client/app/util/logger.dart';
 import 'package:ai_client/domain/usecases/create_element.dart';
 import 'package:ai_client/injection_container.dart';
 import 'package:ai_client/presentation/bloc/models/remote_model_bloc.dart';
@@ -53,16 +54,17 @@ class CreateElementScreen extends StatelessWidget {
           return const Center(child: Icon(Icons.refresh));
         }
         if (state is RemoteModelsDone) {
+          logger.i("GOT HERE");
           modelName = state.models![state.selected!]['title'];
           return Column(
-          children: [
-            Text(
-              modelName,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            _buildForm(state.models![state.selected!])
-          ],
-        );
+            children: [
+              Text(
+                modelName,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              _buildForm(state.models![state.selected!])
+            ],
+          );
         }
         return const SizedBox();
       },

@@ -12,9 +12,14 @@ abstract class ModelsService {
   @GET(Apis.models)
   Future<HttpResponse<dynamic>> getModels();
 
+  @GET('/{model}')
+  Future<HttpResponse<dynamic>> getElements(
+    @Path('model') String model
+  );
+
   @POST('/{model}')
   Future<HttpResponse<dynamic>> createElement(
-    @Path("model") String model,
+    @Path('model') String model,
     @Body() Map<String, dynamic> requestBody
   );
 }

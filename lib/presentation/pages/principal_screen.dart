@@ -1,4 +1,5 @@
 import 'package:ai_client/presentation/bloc/models/remote_model_bloc.dart';
+import 'package:ai_client/presentation/bloc/models/remote_model_event.dart';
 import 'package:ai_client/presentation/bloc/models/remote_model_state.dart';
 import 'package:ai_client/presentation/pages/create_element.dart';
 import 'package:ai_client/presentation/pages/drones_screen.dart';
@@ -37,7 +38,7 @@ class PrincipalScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pushNamed(DronesScreen.route);
               },
               child: const Text('Drones'),
@@ -52,7 +53,7 @@ class PrincipalScreen extends StatelessWidget {
 
   _buildBody(BuildContext context) {
     return BlocBuilder<RemoteModelsBloc,RemoteModelsState> (
-      builder: (_,state) {
+      builder: (context,state) {
         if (state is RemoteModelsLoading) {
           return const Center(child: CupertinoActivityIndicator());
         }
@@ -66,8 +67,10 @@ class PrincipalScreen extends StatelessWidget {
             for (var index = 0; index < (state.models?.length ?? 0); index++) ...[
               ElevatedButton(
                 onPressed: () {
-                  state.selected = index;
-                  Navigator.of(context).pushNamed(CreateElementScreen.route);
+                  BlocProvider.of<RemoteModelsBloc>(context).add(ChangeSelected(index));
+                  Future.delayed(Duration.zero, () {
+                    Navigator.of(context).pushNamed(CreateElementScreen.route);
+                  });
                 },
                 child: Text(state.models![index]['title'] ?? ''),
               ),

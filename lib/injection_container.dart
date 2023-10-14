@@ -9,6 +9,7 @@ import 'package:ai_client/domain/repositories/models_repository.dart';
 import 'package:ai_client/domain/repositories/user_repository.dart';
 import 'package:ai_client/domain/usecases/create_element.dart';
 import 'package:ai_client/domain/usecases/get_drone.dart';
+import 'package:ai_client/domain/usecases/get_elements.dart';
 import 'package:ai_client/domain/usecases/get_models.dart';
 import 'package:ai_client/domain/usecases/get_user.dart';
 import 'package:ai_client/presentation/bloc/drones/remote_drone_bloc.dart';
@@ -54,6 +55,9 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<CreateElementUseCase>(
     CreateElementUseCase(sl())
   );
+  sl.registerSingleton<GetElementsUseCase>(
+    GetElementsUseCase(sl())
+  );
 
   // Blocs
   sl.registerFactory<RemoteUsersBloc>(
@@ -62,7 +66,8 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<RemoteDronesBloc>(
     ()=> RemoteDronesBloc(sl())
   );
-  sl.registerFactory<RemoteModelsBloc>(
-    ()=> RemoteModelsBloc(sl())
-  );
+  sl.registerFactory<RemoteModelsBloc>(() => RemoteModelsBloc(
+    sl<GetModelUseCase>(), 
+    sl<GetElementsUseCase>(),
+  ));
 }

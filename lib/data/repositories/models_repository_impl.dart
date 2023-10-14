@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:ai_client/app/util/data_state.dart';
 import 'package:ai_client/data/services/models_service.dart';
+import 'package:ai_client/domain/entities/general.dart';
 import 'package:ai_client/domain/repositories/models_repository.dart';
 import 'package:dio/dio.dart';
 
@@ -16,6 +17,31 @@ class ModelRepositoryImpl implements ModelRepository {
 
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(httpResponse.data);
+      } else {
+        return DataFailed(
+          DioException(
+            error: httpResponse.response.statusMessage,
+            response: httpResponse.response,
+            requestOptions: httpResponse.response.requestOptions
+          )
+        );
+      }
+    } on DioException catch(e){
+      return DataFailed(e);
+    }
+  }
+
+  @override
+  Future<DataState<List<GeneralEntity>>> getElements(String model, dynamic jsonSchema) async {
+    try {
+      final httpResponse = await _modelsService.getElements(model);
+
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
+        List<GeneralEntity> elements= [];
+        for (dynamic element in httpResponse.data) {
+          elements.add(GeneralEntity(jsonSchema, element));
+        }
+        return DataSuccess(elements);
       } else {
         return DataFailed(
           DioException(

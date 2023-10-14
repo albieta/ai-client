@@ -1,5 +1,5 @@
-import 'package:ai_client/presentation/bloc/drones/remote_drone_bloc.dart';
-import 'package:ai_client/presentation/bloc/drones/remote_drone_state.dart';
+import 'package:ai_client/presentation/bloc/models/remote_model_bloc.dart';
+import 'package:ai_client/presentation/bloc/models/remote_model_state.dart';
 import 'package:ai_client/presentation/widgets/element.dart';
 import 'package:ai_client/routes.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,23 +38,23 @@ class DronesScreen extends StatelessWidget {
   }
 
   _buildBody() {
-    return BlocBuilder<RemoteDronesBloc,RemoteDronesState> (
+    return BlocBuilder<RemoteModelsBloc,RemoteModelsState> (
       builder: (_,state) {
-        if (state is RemoteDronesLoading) {
+        if (state is RemoteModelsLoading) {
           return const Center(child: CupertinoActivityIndicator());
         }
-        if (state is RemoteDronesError) {
+        if (state is RemoteModelsError) {
           return const Center(child: Icon(Icons.refresh));
         }
-        if (state is RemoteDronesDone) {
+        if (state is RemoteModelsDone) {
           return ListView.builder(
-           itemBuilder: (context,index){
-            return ElementWidget(
-              element: state.drones![index] ,
-            );
-           },
-           itemCount: state.drones!.length,
-         );
+            itemBuilder: (context,index){
+              return ElementWidget(
+                element: state.elements![index] ,
+              );
+            },
+            itemCount: state.elements!.length,
+          );
         }
         return const SizedBox();
       },
