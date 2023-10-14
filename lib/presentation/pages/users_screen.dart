@@ -1,11 +1,13 @@
 import 'package:ai_client/presentation/bloc/users/remote_user_bloc.dart';
 import 'package:ai_client/presentation/bloc/users/remote_user_state.dart';
-import 'package:ai_client/presentation/widgets/user.dart';
+import 'package:ai_client/presentation/widgets/element.dart';
+import 'package:ai_client/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UsersScreen extends StatelessWidget {
+  static const String route = Routes.users;
   const UsersScreen({ Key? key }) : super(key: key);
 
   @override
@@ -47,8 +49,8 @@ class UsersScreen extends StatelessWidget {
         if (state is RemoteUsersDone) {
           return ListView.builder(
            itemBuilder: (context,index){
-            return UserWidget(
-              user: state.users![index] ,
+            return ElementWidget(
+              element: state.users![index] ,
             );
            },
            itemCount: state.users!.length,

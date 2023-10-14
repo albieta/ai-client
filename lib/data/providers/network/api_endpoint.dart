@@ -5,4 +5,5 @@ class APIEndpoint {
 class Apis {
   static const String users = '/user';
   static const String drones = '/drone';
+  static const String models = '/models';
 }

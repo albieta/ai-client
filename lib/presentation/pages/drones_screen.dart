@@ -1,11 +1,13 @@
 import 'package:ai_client/presentation/bloc/drones/remote_drone_bloc.dart';
 import 'package:ai_client/presentation/bloc/drones/remote_drone_state.dart';
-import 'package:ai_client/presentation/widgets/drone.dart';
+import 'package:ai_client/presentation/widgets/element.dart';
+import 'package:ai_client/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DronesScreen extends StatelessWidget {
+  static const String route = Routes.drones;
   const DronesScreen({ Key? key }) : super(key: key);
 
   @override
@@ -47,8 +49,8 @@ class DronesScreen extends StatelessWidget {
         if (state is RemoteDronesDone) {
           return ListView.builder(
            itemBuilder: (context,index){
-            return DroneWidget(
-              drone: state.drones![index] ,
+            return ElementWidget(
+              element: state.drones![index] ,
             );
            },
            itemCount: state.drones!.length,

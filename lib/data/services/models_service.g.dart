@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'general_service.dart';
+part of 'models_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'general_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _GeneralService<T> implements GeneralService<T> {
-  _GeneralService(
+class _ModelsService implements ModelsService {
+  _ModelsService(
     this._dio, {
     this.baseUrl,
   }) {
@@ -21,20 +21,20 @@ class _GeneralService<T> implements GeneralService<T> {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<List<T>>> getItems(String endpoint) async {
+  Future<HttpResponse<dynamic>> getModels() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<T>>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '',
+              '/models',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -43,7 +43,39 @@ class _GeneralService<T> implements GeneralService<T> {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    var value = List<T>.from(_result.data!);
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> createElement(
+    String model,
+    Map<String, dynamic> requestBody,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(requestBody);
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/${model}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
