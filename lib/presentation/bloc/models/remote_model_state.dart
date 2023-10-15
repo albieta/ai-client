@@ -1,50 +1,39 @@
-import 'package:ai_client/domain/entities/general.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:equatable/equatable.dart';
 import 'package:dio/dio.dart';
 
 class RemoteModelsState extends Equatable {
   final List<dynamic> ? models;
-  final int ? selected;
-  final List<GeneralEntity> ? elements;
+  int ? selected;
   final DioException ? error;
   
-  const RemoteModelsState({this.models, this.selected, this.elements, this.error});
+  RemoteModelsState({this.models, this.selected, this.error});
   
   @override
-  List<Object?> get props => [models, selected, elements, error];
+  List<Object?> get props => [models, selected, error];
 
   RemoteModelsState copyWith({
     List<dynamic>? models,
     int? selected,
-    List<GeneralEntity>? elements,
     DioException? error,
   }) {
     return RemoteModelsState(
       models: models ?? this.models,
       selected: selected ?? this.selected,
-      elements: elements ?? this.elements,
       error: error ?? this.error,
     );
   }
 }
 
 class RemoteModelsLoading extends RemoteModelsState {
-  const RemoteModelsLoading();
+  RemoteModelsLoading();
 }
 
 class RemoteModelsDone extends RemoteModelsState {
-  const RemoteModelsDone(dynamic model) : super(models: model);
-  const RemoteModelsDone.withDetails({
-    required dynamic model,
-    required int selected,
-    required List<GeneralEntity> elements,
-  }) : super(
-          models: model,
-          selected: selected,
-          elements: elements,
-        );
+  RemoteModelsDone(dynamic model) : super(models: model);
 }
 
 class RemoteModelsError extends RemoteModelsState {
-  const RemoteModelsError(dynamic error) : super(error: error);
+  RemoteModelsError(dynamic error) : super(error: error);
 }

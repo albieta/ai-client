@@ -1,5 +1,5 @@
 
-import 'package:ai_client/data/providers/network/api_endpoint.dart';
+import 'package:ai_client/data/providers/api_endpoint.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 part 'models_service.g.dart';

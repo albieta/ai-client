@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:ai_client/app/util/logger.dart';
 import 'package:ai_client/domain/usecases/create_element.dart';
 import 'package:ai_client/injection_container.dart';
 import 'package:ai_client/presentation/bloc/models/remote_model_bloc.dart';
@@ -8,9 +7,11 @@ import 'package:ai_client/presentation/bloc/models/remote_model_state.dart';
 import 'package:ai_client/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateElementScreen extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
   static const String route = Routes.createElement;
   String modelName = '';
   Map<String, dynamic> formData = {};
@@ -54,7 +55,6 @@ class CreateElementScreen extends StatelessWidget {
           return const Center(child: Icon(Icons.refresh));
         }
         if (state is RemoteModelsDone) {
-          logger.i("GOT HERE");
           modelName = state.models![state.selected!]['title'];
           return Column(
             children: [
@@ -62,7 +62,10 @@ class CreateElementScreen extends StatelessWidget {
                 modelName,
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              _buildForm(state.models![state.selected!])
+              Form(
+                key: _formKey,
+                child: _buildForm(state.models![state.selected!]),
+              )
             ],
           );
         }
@@ -86,14 +89,19 @@ class CreateElementScreen extends StatelessWidget {
           onChanged: (value) {
             formData[fieldName] = value;
           },
+          validator: commonValidator,
         );
-      } else if (fieldDetails['type'] == 'int') {
+      } else if (fieldDetails['type'] == 'integer') {
         formField = TextFormField(
-          decoration: InputDecoration(labelText: fieldName),
+          decoration: InputDecoration(labelText: fieldName, hintText: 'Enter a number'),
           keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly
+          ],
           onChanged: (value) {
             formData[fieldName] = int.tryParse(value) ?? 0;
           },
+          validator: commonValidator,
         );
       }
 
@@ -103,12 +111,14 @@ class CreateElementScreen extends StatelessWidget {
     formFields.add(
       ElevatedButton(
         onPressed: () async {
-          final createElementUseCase = sl<CreateElementUseCase>();
+          if (_formKey.currentState?.validate() == true) {
+            final createElementUseCase = sl<CreateElementUseCase>();
 
-          await createElementUseCase.call(params: {
-            'model': modelName.toLowerCase(),
-            'requestBody': formData,
-          });
+            await createElementUseCase.call(params: {
+              'model': modelName.toLowerCase(),
+              'requestBody': formData,
+            });
+          }
         },
         child: const Text('Submit'),
       ),
@@ -117,5 +127,12 @@ class CreateElementScreen extends StatelessWidget {
     return Column(
       children: formFields,
     );
+  }
+
+  String? commonValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+    return null;
   }
 }

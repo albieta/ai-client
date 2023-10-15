@@ -1,14 +1,14 @@
-import 'package:ai_client/presentation/bloc/models/remote_model_bloc.dart';
-import 'package:ai_client/presentation/bloc/models/remote_model_state.dart';
+import 'package:ai_client/presentation/bloc/elements/remote_elements_bloc.dart';
+import 'package:ai_client/presentation/bloc/elements/remote_elements_state.dart';
 import 'package:ai_client/presentation/widgets/element.dart';
 import 'package:ai_client/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DronesScreen extends StatelessWidget {
-  static const String route = Routes.drones;
-  const DronesScreen({ Key? key }) : super(key: key);
+class ListElementsScreen extends StatelessWidget {
+  static const String route = Routes.listElements;
+  const ListElementsScreen({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class DronesScreen extends StatelessWidget {
   _buildAppbar(BuildContext context) {
     return AppBar(
       title: const Text(
-          'Drones',
+          'List of elements',
           style: TextStyle(
             color: Colors.black
           ),
@@ -38,15 +38,15 @@ class DronesScreen extends StatelessWidget {
   }
 
   _buildBody() {
-    return BlocBuilder<RemoteModelsBloc,RemoteModelsState> (
+    return BlocBuilder<RemoteElementsBloc,RemoteElementsState> (
       builder: (_,state) {
-        if (state is RemoteModelsLoading) {
+        if (state is RemoteElementsLoading) {
           return const Center(child: CupertinoActivityIndicator());
         }
-        if (state is RemoteModelsError) {
+        if (state is RemoteElementsError) {
           return const Center(child: Icon(Icons.refresh));
         }
-        if (state is RemoteModelsDone) {
+        if (state is RemoteElementsDone) {
           return ListView.builder(
             itemBuilder: (context,index){
               return ElementWidget(
